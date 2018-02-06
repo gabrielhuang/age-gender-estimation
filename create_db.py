@@ -14,10 +14,12 @@ def get_args():
                         help="path to output database mat file")
     parser.add_argument("--db", type=str, default="wiki",
                         help="dataset; wiki or imdb")
-    parser.add_argument("--img_size", type=int, default=32,
+    parser.add_argument("--img_size", type=int, default=64,
                         help="output image size")
     parser.add_argument("--min_score", type=float, default=1.0,
                         help="minimum face_score")
+    parser.add_argument("--input", default='data', 
+                        help="path to dataset")
     args = parser.parse_args()
     return args
 
@@ -29,7 +31,7 @@ def main():
     img_size = args.img_size
     min_score = args.min_score
 
-    root_path = "data/{}_crop/".format(db)
+    root_path = args.input
     mat_path = root_path + "{}.mat".format(db)
     full_path, dob, gender, photo_taken, face_score, second_face_score, age = get_meta(mat_path, db)
 
