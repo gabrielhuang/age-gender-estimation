@@ -18,8 +18,10 @@ def get_args():
                         help="output image size")
     parser.add_argument("--min_score", type=float, default=1.0,
                         help="minimum face_score")
-    parser.add_argument("--input", default='data', 
+    parser.add_argument("--input", default='data',
                         help="path to dataset")
+    parser.add_argument("--max_samples", type=int, default=0,
+                        help="max samples")
     args = parser.parse_args()
     return args
 
@@ -32,7 +34,7 @@ def main():
     min_score = args.min_score
 
     root_path = args.input
-    mat_path = root_path + "{}.mat".format(db)
+    mat_path = "{}/{}.mat".format(root_path, db)
     full_path, dob, gender, photo_taken, face_score, second_face_score, age = get_meta(mat_path, db)
 
     out_genders = []
@@ -40,6 +42,10 @@ def main():
     out_imgs = []
 
     for i in tqdm(range(len(face_score))):
+        if args.max_samples and i >= args.max_samples:
+            print 'Reached maximum samples {}'.format(args.max_samples)
+            break
+
         if face_score[i] < min_score:
             continue
 
